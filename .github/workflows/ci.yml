@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.16.x
+          - 1.17.x
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.16.x
+          - 1.17.x
     env:
       OS: macos-latest
       GOLANG: ${{ matrix.golang }}
@@ -81,7 +81,7 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.16.x
+          - 1.17.x
     env:
       OS: ubuntu-latest
       GOLANG: ${{ matrix.golang }}
