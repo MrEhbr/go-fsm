@@ -1,0 +1,47 @@
+[
+  {
+    "from": [
+      "UNKNOWN"
+    ],
+    "to": "CREATED"
+  },
+  {
+    "from": [
+      "UNKNOWN"
+    ],
+    "to": "FINISHED",
+    "event": "success_order"
+  },
+  {
+    "from": [
+      "CREATED"
+    ],
+    "to": "STARTED",
+    "event": "place_order",
+    "before_actions": [
+      "check_availability",
+      "book"
+    ]
+  },
+  {
+    "from": [
+      "CREATED"
+    ],
+    "to": "FAILED",
+    "event": "fail_order",
+    "actions": [
+      "!fail_order",
+      "call_api_v2"
+    ]
+  },
+  {
+    "from": [
+      "STARTED"
+    ],
+    "to": "FINISHED",
+    "event": "success_order",
+    "actions": [
+      "send_email"
+    ]
+  }
+]

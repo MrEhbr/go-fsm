@@ -1,0 +1,36 @@
+[
+  {
+    "from": [
+      "UNKNOWN"
+    ],
+    "to": "CREATED"
+  },
+  {
+    "from": [
+      "CREATED"
+    ],
+    "to": "STARTED",
+    "event": "place_order",
+    "before_actions": [
+      "check_availability",
+      "book"
+    ]
+  },
+  {
+    "from": [
+      "CREATED"
+    ],
+    "to": "FAILED",
+    "event": "fail_order"
+  },
+  {
+    "from": [
+      "STARTED"
+    ],
+    "to": "FINISHED",
+    "event": "success_order",
+    "actions": [
+      "send_email"
+    ]
+  }
+]
