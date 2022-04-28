@@ -5,7 +5,7 @@ var fsmTemplate = `package {{.Package.Name}}
 // This code is generated with http://github.com/MrEhbr/fsm tool
 
 {{ if not .Options.DisableGoGenerate}}
-//{{"go:generate"}} fsm gen -s {{.Options.Struct}} -f {{.Options.StateField}} -o {{ base .Options.OutputFile }}
+//{{"go:generate"}} go-fsm gen -s {{.Options.Struct}} -f {{.Options.StateField}} -o {{ base .Options.OutputFile }}
 {{- if .Options.TransitionsFile}} -t {{ path_join (rel (dir .Options.OutputFile) (dir .Options.TransitionsFile)) (base .Options.TransitionsFile) }} {{- end }}
 {{- if .Options.ActionGraphOutputFile}} -a {{ path_join (rel (dir .Options.OutputFile) (dir .Options.ActionGraphOutputFile)) (base .Options.ActionGraphOutputFile) }} {{- end }}
 {{- end }}
