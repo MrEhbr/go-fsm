@@ -1,5 +1,5 @@
 # build
-FROM            golang:1.16-alpine as builder
+FROM            golang:1.19-alpine as builder
 # dynamic config
 ARG             BUILD_DATE
 ARG             VCS_REF
@@ -14,7 +14,7 @@ COPY            . ./
 RUN             make install VCS_REF=$VCS_REF VERSION=$VERSION BUILD_DATE=$BUILD_DATE
 
 # minimalist runtime
-FROM alpine:3.11
+FROM alpine:3.16
 # dynamic config
 ARG             BUILD_DATE
 ARG             VCS_REF
