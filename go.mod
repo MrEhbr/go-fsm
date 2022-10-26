@@ -12,7 +12,7 @@ require (
 	golang.org/x/tools v0.1.9
 	gopkg.in/yaml.v2 v2.4.0
 	moul.io/graphman v1.6.0
-	moul.io/graphman/viz v0.0.0-20210616043755-eef9a7ac05c7
+	moul.io/graphman/viz v1.6.0
 	mvdan.cc/gofumpt v0.3.0
 )
 

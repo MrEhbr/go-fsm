@@ -12,9 +12,9 @@ jobs:
     name: golangci-lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           version: v1.44
           args: --timeout=2m
@@ -27,9 +27,9 @@ jobs:
         golang:
           - 1.17.x
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.golang }}
       - name: Run tests on Windows
@@ -46,12 +46,12 @@ jobs:
       OS: macos-latest
       GOLANG: ${{ matrix.golang }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
@@ -67,7 +67,7 @@ jobs:
           git --no-pager diff go.mod go.sum
           git --no-pager diff --quiet go.mod go.sum
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           #token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
@@ -86,12 +86,12 @@ jobs:
       OS: ubuntu-latest
       GOLANG: ${{ matrix.golang }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
@@ -107,7 +107,7 @@ jobs:
       - name: Run tests on Unix-like operating systems
         run: make unittest
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
