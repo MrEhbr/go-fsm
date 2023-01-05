@@ -2,7 +2,7 @@ package fsm
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -138,7 +138,7 @@ type Order struct {
 }`
 
 				const transitions = `[{"from": ["CREATED"],"to": "STARTED","event": "place_order"}]`
-				f, err := ioutil.TempFile(t.TempDir(), "trs")
+				f, err := os.CreateTemp(t.TempDir(), "trs")
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -211,7 +211,7 @@ type Order struct {
 }`
 
 				const transitions = `[{"from": ["CREATED"],"to": "STARTED","event": "place_order"}]`
-				f, err := ioutil.TempFile(t.TempDir(), "*_trs.json")
+				f, err := os.CreateTemp(t.TempDir(), "*_trs.json")
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -259,7 +259,7 @@ type Order struct {
 - from: CREATED
   to: STARTED
   event: place_order`
-				f, err := ioutil.TempFile(t.TempDir(), "*_trs.yml")
+				f, err := os.CreateTemp(t.TempDir(), "*_trs.yml")
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -308,7 +308,7 @@ type Order struct {
   - CREATED
   to: STARTED
   event: place_order`
-				f, err := ioutil.TempFile(t.TempDir(), "*_trs.yml")
+				f, err := os.CreateTemp(t.TempDir(), "*_trs.yml")
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -362,12 +362,12 @@ func createPackage(pkg, dir string, src []byte) (string, error) {
 	mod := fmt.Sprintf(`module %s
 
 go 1.16`, pkg)
-	if err := ioutil.WriteFile(filepath.Join(dir, "go.mod"), []byte(mod), 0o666); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte(mod), 0o666); err != nil {
 		return "", err
 	}
 
 	fpath := filepath.Join(dir, pkg+".go")
-	if err := ioutil.WriteFile(fpath, src, 0o666); err != nil {
+	if err := os.WriteFile(fpath, src, 0o666); err != nil {
 		return "", err
 	}
 

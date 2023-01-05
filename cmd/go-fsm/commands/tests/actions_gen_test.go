@@ -3,7 +3,8 @@ package tests
 import (
 	"encoding/json"
 	"flag"
-	"io/ioutil"
+	"io"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -19,7 +20,7 @@ func TestActionsGenCommand(t *testing.T) {
 		is := is.New(t)
 
 		app := &cli.App{
-			Writer:         ioutil.Discard,
+			Writer:         io.Discard,
 			ExitErrHandler: func(_ *cli.Context, _ error) {},
 		}
 		set := flag.NewFlagSet("test", 0)
@@ -38,7 +39,7 @@ func TestActionsGenCommand(t *testing.T) {
 
 		tempDir := t.TempDir()
 		app := &cli.App{
-			Writer:         ioutil.Discard,
+			Writer:         io.Discard,
 			ExitErrHandler: func(_ *cli.Context, _ error) {},
 		}
 		set := flag.NewFlagSet("test", 0)
@@ -59,7 +60,7 @@ func TestActionsGenCommand(t *testing.T) {
 
 		tempDir := t.TempDir()
 		app := &cli.App{
-			Writer:         ioutil.Discard,
+			Writer:         io.Discard,
 			ExitErrHandler: func(_ *cli.Context, _ error) {},
 		}
 		set := flag.NewFlagSet("test", 0)
@@ -80,7 +81,7 @@ func TestActionsGenCommand(t *testing.T) {
 
 		tempDir := t.TempDir()
 		app := &cli.App{
-			Writer:         ioutil.Discard,
+			Writer:         io.Discard,
 			ExitErrHandler: func(_ *cli.Context, _ error) {},
 		}
 		set := flag.NewFlagSet("test", 0)
@@ -93,9 +94,9 @@ func TestActionsGenCommand(t *testing.T) {
 		c := cli.NewContext(app, set, nil)
 		err := commands.ActionsGenCommand.Run(c)
 		is.NoErr(err)
-		files, err := ioutil.ReadDir(tempDir)
+		files, err := os.ReadDir(tempDir)
 		is.NoErr(err)
-		trsData, err := ioutil.ReadFile("./test_data/transitions.json")
+		trsData, err := os.ReadFile("./test_data/transitions.json")
 		is.NoErr(err)
 		var trs fsm.Transitions
 		is.NoErr(json.Unmarshal(trsData, &trs))
@@ -103,7 +104,8 @@ func TestActionsGenCommand(t *testing.T) {
 		is.True(len(actions) == len(files))
 		for _, v := range files {
 			is.True(filepath.Ext(v.Name()) == ".go")
-			is.True(v.Size() > 0)
+			info, _ := v.Info()
+			is.True(!v.IsDir() && info.Size() > 0)
 			is.True(fsm.InStrings(actions, strings.TrimSuffix(v.Name(), ".go")))
 		}
 	})

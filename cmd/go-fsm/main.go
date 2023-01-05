@@ -35,6 +35,7 @@ func main() {
 }
 
 // These values are private which ensures they can only be set with the build flags.
+//
 //nolint:unused
 var (
 	version = "unknown"

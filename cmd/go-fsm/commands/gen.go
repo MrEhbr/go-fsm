@@ -3,7 +3,6 @@ package commands
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -143,7 +142,7 @@ func genAction(c *cli.Context) error {
 		return err
 	}
 
-	if err := ioutil.WriteFile(options.OutputFile, buf.Bytes(), 0o644); err != nil {
+	if err := os.WriteFile(options.OutputFile, buf.Bytes(), 0o644); err != nil {
 		return err
 	}
 
@@ -153,7 +152,7 @@ func genAction(c *cli.Context) error {
 			return err
 		}
 
-		if err := ioutil.WriteFile(options.ActionGraphOutputFile, buf.Bytes(), 0o644); err != nil {
+		if err := os.WriteFile(options.ActionGraphOutputFile, buf.Bytes(), 0o644); err != nil {
 			return err
 		}
 	}

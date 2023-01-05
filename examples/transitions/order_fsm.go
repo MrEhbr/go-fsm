@@ -8,7 +8,7 @@ import (
 )
 
 // DO NOT EDIT!
-// This code is generated with http://github.com/MrEhbr/fsm tool
+// This code is generated with http://github.com/MrEhbr/go-fsm tool
 
 //go:generate fsm gen -s Order -f State -o order_fsm.go -t transitions.json
 

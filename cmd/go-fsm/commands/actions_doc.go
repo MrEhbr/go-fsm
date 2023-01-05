@@ -3,7 +3,6 @@ package commands
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -82,7 +81,7 @@ func ActionDocGenerate(trFile, output string) error {
 	}
 
 	var source []byte
-	source, _ = ioutil.ReadFile(output)
+	source, _ = os.ReadFile(output)
 
 	md := goldmark.New(
 		goldmark.WithExtensions(extension.GFM),

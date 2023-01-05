@@ -8,7 +8,7 @@ import (
 	"go/constant"
 	"go/types"
 	"io"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -95,7 +95,7 @@ func NewGenerator(opt Options) (*Generator, error) {
 			decoder = yaml.Unmarshal
 		}
 
-		data, err := ioutil.ReadFile(opt.TransitionsFile)
+		data, err := os.ReadFile(opt.TransitionsFile)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read transitions file: %w", err)
 		}

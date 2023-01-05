@@ -2,7 +2,7 @@ package fsm
 
 var fsmTemplate = `package {{.Package.Name}}
 // DO NOT EDIT!
-// This code is generated with http://github.com/MrEhbr/fsm tool
+// This code is generated with http://github.com/MrEhbr/go-fsm tool
 
 {{ if not .Options.DisableGoGenerate}}
 //{{"go:generate"}} go-fsm gen -s {{.Options.Struct}} -f {{.Options.StateField}} -o {{ base .Options.OutputFile }}
@@ -20,9 +20,9 @@ type (
 		Actions []string
 	}
 	// {{.Struct.Name}}Handle handles transitions action
-	{{.Struct.Name}}HandleAction func(action string, transition {{.Struct.Name}}Transition, obj *{{.Struct.Name}}) error
+	{{.Struct.Name}}HandleAction func(ctx context.Context, action string, transition {{.Struct.Name}}Transition, obj *{{.Struct.Name}}) error
 	// Save state to external storage
-	{{.Struct.Name}}PersistState func(obj *{{.Struct.Name}}, state {{.Struct.StateType}}) error
+	{{.Struct.Name}}PersistState func(ctx context.Context, obj *{{.Struct.Name}}, state {{.Struct.StateType}}) error
 	// {{.Struct.Name}}StateMachine is a FSM that can handle transitions of a lot of objects. eventHandler and transitions are configured before use them.
 	{{.Struct.Name}}StateMachine struct {
 		transitions []{{.Struct.Name}}Transition
@@ -70,7 +70,7 @@ func New{{.Struct.Name}}StateMachine(opts ...Option) *{{.Struct.Name}}StateMachi
 }
 
 // ChangeState fires a event and if event succeeded then change state.
-func (m *{{.Struct.Name}}StateMachine) ChangeState(event string, obj *{{.Struct.Name}}) error {
+func (m *{{.Struct.Name}}StateMachine) ChangeState(ctx context.Context, event string, obj *{{.Struct.Name}}) error {
 	trans, ok := m.findTransMatching(obj.{{.Struct.StateField}}, event)
 	if !ok {
 		return fmt.Errorf("cannot find transition for event [%s] when in state [%v]", event, obj.{{.Struct.StateField}})
@@ -78,7 +78,7 @@ func (m *{{.Struct.Name}}StateMachine) ChangeState(event string, obj *{{.Struct.
 
 	if len(trans.BeforeActions) > 0 && m.actionHandler != nil {
 		for _, action := range trans.BeforeActions {
-			if err := m.actionHandler(action, trans, obj); err != nil {
+			if err := m.actionHandler(ctx, action, trans, obj); err != nil {
 				if errors.Is(err, Err{{.Struct.Name}}FsmSkip) {
 					return nil
 				}
@@ -89,7 +89,7 @@ func (m *{{.Struct.Name}}StateMachine) ChangeState(event string, obj *{{.Struct.
 	}
 
 	if m.persister != nil {
-		if err := m.persister(obj, trans.To); err != nil {
+		if err := m.persister(ctx, obj, trans.To); err != nil {
 			return err
 		}
 	}
@@ -99,7 +99,7 @@ func (m *{{.Struct.Name}}StateMachine) ChangeState(event string, obj *{{.Struct.
 	if len(trans.Actions) > 0 && m.actionHandler  != nil {
 		var errs error
 		for _, action := range trans.Actions {
-			if err := m.actionHandler(action, trans, obj); err != nil {
+			if err := m.actionHandler(ctx, action, trans, obj); err != nil {
 				errs = multierror.Append(errs, fmt.Errorf("%w. action [%s] return error: %s", Err{{.Struct.Name}}FsmAction, action, err))
 			}
 		}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -61,7 +60,7 @@ var ActionsGenCommand = &cli.Command{
 			}
 		}
 
-		tpl, err := ioutil.ReadFile(c.String("template"))
+		tpl, err := os.ReadFile(c.String("template"))
 		if err != nil {
 			return cli.Exit(err, 1)
 		}
@@ -117,7 +116,7 @@ func actionsGenerate(trFile, outputDir, tpl string) error {
 			return fmt.Errorf("failed to format generated code: %w", err)
 		}
 
-		if err := ioutil.WriteFile(fileName, processedSource, 0o644); err != nil {
+		if err := os.WriteFile(fileName, processedSource, 0o644); err != nil {
 			return fmt.Errorf("failed to write file %q: %w", fileName, err)
 		}
 	}
@@ -142,7 +141,7 @@ func transitionsFromFile(name string) (fsm.Transitions, error) {
 			decoder = yaml.Unmarshal
 		}
 
-		data, err := ioutil.ReadFile(name)
+		data, err := os.ReadFile(name)
 		if err != nil {
 			return nil, err
 		}

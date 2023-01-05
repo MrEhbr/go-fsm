@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -17,7 +16,7 @@ import (
 func TestActionsDocCommand(t *testing.T) {
 	const trsFile = "./test_data/transitions.json"
 	var transitions fsm.Transitions
-	data, err := ioutil.ReadFile(trsFile)
+	data, err := os.ReadFile(trsFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,7 +27,7 @@ func TestActionsDocCommand(t *testing.T) {
 	t.Run("first time generate", func(t *testing.T) {
 		is := is.New(t)
 		tmpDir := t.TempDir()
-		tmpFile, err := ioutil.TempFile(tmpDir, "README.md")
+		tmpFile, err := os.CreateTemp(tmpDir, "README.md")
 		is.NoErr(err)
 		is.NoErr(commands.ActionDocGenerate(trsFile, tmpFile.Name()))
 		actions := transitions.Actions()
@@ -45,7 +44,7 @@ func TestActionsDocCommand(t *testing.T) {
 	t.Run("append actions, transitions updated", func(t *testing.T) {
 		is := is.New(t)
 		tmpDir := t.TempDir()
-		tmpFile, err := ioutil.TempFile(tmpDir, "README.md")
+		tmpFile, err := os.CreateTemp(tmpDir, "README.md")
 		is.NoErr(err)
 
 		want := `### book

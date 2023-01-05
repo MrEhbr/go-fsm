@@ -1,8 +1,9 @@
 name: PR
 
 on:
+  #pull_request_target:
   pull_request:
-    branches: [main]
+    branches: [master, main]
   issue_comment:
     types: [edited]
 
@@ -11,10 +12,10 @@ jobs:
     name: Release-Notes Preview
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       - run: |
           git fetch --prune --unshallow --tags
-      - uses: snyk/release-notes-preview@v1.6.1
+      - uses: snyk/release-notes-preview@v1.6.2
         with:
           releaseBranch: main
         env:
@@ -25,7 +26,7 @@ jobs:
     name: Documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
         with:
           depth: 1
       - uses: K-Phoen/action-misspell@master
