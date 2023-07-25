@@ -1,6 +1,6 @@
 package actions
 
-import "github.com/MrEhbr/go-fsm/examples/transitions"
+import "github.com/MrEhbr/go-fsm/v2/examples/transitions"
 
 type CallApiV2Action struct{}
 

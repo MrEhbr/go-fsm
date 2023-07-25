@@ -5,7 +5,7 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/MrEhbr/go-fsm/cmd/go-fsm/commands"
+	"github.com/MrEhbr/go-fsm/v2/cmd/go-fsm/commands"
 	"github.com/urfave/cli/v2"
 )
 

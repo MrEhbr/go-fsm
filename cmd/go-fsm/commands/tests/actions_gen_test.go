@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MrEhbr/go-fsm"
-	"github.com/MrEhbr/go-fsm/cmd/go-fsm/commands"
+	"github.com/MrEhbr/go-fsm/v2"
+	"github.com/MrEhbr/go-fsm/v2/cmd/go-fsm/commands"
 	"github.com/matryer/is"
 	"github.com/urfave/cli/v2"
 )

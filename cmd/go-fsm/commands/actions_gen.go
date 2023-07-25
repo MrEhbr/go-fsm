@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/MrEhbr/go-fsm"
+	"github.com/MrEhbr/go-fsm/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/tools/imports"
 	"gopkg.in/yaml.v2"

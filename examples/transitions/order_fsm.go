@@ -1,6 +1,7 @@
 package transitions
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -10,7 +11,7 @@ import (
 // DO NOT EDIT!
 // This code is generated with http://github.com/MrEhbr/go-fsm tool
 
-//go:generate fsm gen -s Order -f State -o order_fsm.go -t transitions.json
+//go:generate go-fsm gen -s Order -f State -o order_fsm.go -t transitions.json
 
 type (
 	// OrderTransition is a state transition and all data are literal values that simplifies FSM usage and make it generic.
@@ -22,9 +23,9 @@ type (
 		Actions       []string
 	}
 	// OrderHandle handles transitions action
-	OrderHandleAction func(action string, transition OrderTransition, obj *Order) error
+	OrderHandleAction func(ctx context.Context, action string, transition OrderTransition, obj *Order) error
 	// Save state to external storage
-	OrderPersistState func(obj *Order, state StateType) error
+	OrderPersistState func(ctx context.Context, obj *Order, state StateType) error
 	// OrderStateMachine is a FSM that can handle transitions of a lot of objects. eventHandler and transitions are configured before use them.
 	OrderStateMachine struct {
 		transitions   []OrderTransition
@@ -72,7 +73,7 @@ func NewOrderStateMachine(opts ...Option) *OrderStateMachine {
 }
 
 // ChangeState fires a event and if event succeeded then change state.
-func (m *OrderStateMachine) ChangeState(event string, obj *Order) error {
+func (m *OrderStateMachine) ChangeState(ctx context.Context, event string, obj *Order) error {
 	trans, ok := m.findTransMatching(obj.State, event)
 	if !ok {
 		return fmt.Errorf("cannot find transition for event [%s] when in state [%v]", event, obj.State)
@@ -80,7 +81,7 @@ func (m *OrderStateMachine) ChangeState(event string, obj *Order) error {
 
 	if len(trans.BeforeActions) > 0 && m.actionHandler != nil {
 		for _, action := range trans.BeforeActions {
-			if err := m.actionHandler(action, trans, obj); err != nil {
+			if err := m.actionHandler(ctx, action, trans, obj); err != nil {
 				if errors.Is(err, ErrOrderFsmSkip) {
 					return nil
 				}
@@ -91,7 +92,7 @@ func (m *OrderStateMachine) ChangeState(event string, obj *Order) error {
 	}
 
 	if m.persister != nil {
-		if err := m.persister(obj, trans.To); err != nil {
+		if err := m.persister(ctx, obj, trans.To); err != nil {
 			return err
 		}
 	}
@@ -101,7 +102,7 @@ func (m *OrderStateMachine) ChangeState(event string, obj *Order) error {
 	if len(trans.Actions) > 0 && m.actionHandler != nil {
 		var errs error
 		for _, action := range trans.Actions {
-			if err := m.actionHandler(action, trans, obj); err != nil {
+			if err := m.actionHandler(ctx, action, trans, obj); err != nil {
 				errs = multierror.Append(errs, fmt.Errorf("%w. action [%s] return error: %s", ErrOrderFsmAction, action, err))
 			}
 		}

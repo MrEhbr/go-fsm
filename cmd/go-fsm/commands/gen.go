@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MrEhbr/go-fsm"
+	"github.com/MrEhbr/go-fsm/v2"
 	"github.com/urfave/cli/v2"
 )
 

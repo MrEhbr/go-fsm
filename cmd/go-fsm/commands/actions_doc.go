@@ -9,7 +9,7 @@ import (
 
 	"github.com/Kunde21/markdownfmt/v2/markdown"
 	"github.com/Kunde21/markdownfmt/v2/markdownfmt"
-	"github.com/MrEhbr/go-fsm"
+	"github.com/MrEhbr/go-fsm/v2"
 	"github.com/urfave/cli/v2"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
