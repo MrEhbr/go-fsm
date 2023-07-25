@@ -56,11 +56,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        golangci_lint: [v1.50]
+        golangci_lint: [v1.52]
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.5.3
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3.3.0
+        uses: golangci/golangci-lint-action@v3.6.0
         with:
           version: ${{ matrix.golangci_lint }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
