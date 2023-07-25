@@ -1,4 +1,4 @@
-module github.com/MrEhbr/go-fsm
+module github.com/MrEhbr/go-fsm/v2
 
 go 1.17
 
