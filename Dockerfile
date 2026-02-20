@@ -1,5 +1,5 @@
 # build
-FROM            golang:1.16-alpine as builder
+FROM            golang:1.24-alpine as builder
 # dynamic config
 ARG             BUILD_DATE
 ARG             VCS_REF
