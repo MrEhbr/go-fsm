@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
-	"github.com/hashicorp/go-multierror"
 )
 
 // DO NOT EDIT!
@@ -86,7 +84,7 @@ func (m *OrderStateMachine) ChangeState(ctx context.Context, event string, obj *
 					return nil
 				}
 
-				return fmt.Errorf("%w. action [%s] return error: %s", ErrOrderFsmBeforeAction, action, err)
+				return fmt.Errorf("%w. action [%s] returned error: %w", ErrOrderFsmBeforeAction, action, err)
 			}
 		}
 	}
@@ -100,15 +98,15 @@ func (m *OrderStateMachine) ChangeState(ctx context.Context, event string, obj *
 	obj.State = trans.To
 
 	if len(trans.Actions) > 0 && m.actionHandler != nil {
-		var errs error
+		var errs []error
 		for _, action := range trans.Actions {
 			if err := m.actionHandler(ctx, action, trans, obj); err != nil {
-				errs = multierror.Append(errs, fmt.Errorf("%w. action [%s] return error: %s", ErrOrderFsmAction, action, err))
+				errs = append(errs, fmt.Errorf("%w. action [%s] returned error: %w", ErrOrderFsmAction, action, err))
 			}
 		}
 
-		if errs != nil {
-			return errs
+		if len(errs) > 0 {
+			return errors.Join(errs...)
 		}
 	}
 

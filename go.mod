@@ -1,11 +1,10 @@
 module github.com/MrEhbr/go-fsm/v2
 
-go 1.17
+go 1.20
 
 require (
 	github.com/Kunde21/markdownfmt/v2 v2.1.0
 	github.com/google/go-cmp v0.5.7
-	github.com/hashicorp/go-multierror v1.1.1
 	github.com/matryer/is v1.4.0
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/yuin/goldmark v1.4.8
@@ -19,7 +18,6 @@ require (
 require (
 	github.com/awalterschulze/gographviz v2.0.3+incompatible // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
-	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
