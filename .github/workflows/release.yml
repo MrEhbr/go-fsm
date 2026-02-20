@@ -11,35 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        golang: [1.17.x]
+        golang: [1.22.x]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
       - name: Unshallow
         run: git fetch --prune --unshallow
       - name: Run Semantic Release
         id: semantic
-        uses: codfish/semantic-release-action@v2
+        uses: codfish/semantic-release-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Go
         if: steps.semantic.outputs.new-release-published == 'true'
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.golang }}
-      - name: Cache Go modules
-        if: steps.semantic.outputs.new-release-published == 'true'
-        uses: actions/cache@v3.0.11
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.golang }}-v1-${{ hashFiles('**/go.sum') }}
-          restore-keys: ${{ runner.os }}-go-${{ matrix.golang }}-v1-
       - name: Run GoReleaser
         if: steps.semantic.outputs.new-release-published == 'true'
-        uses: goreleaser/goreleaser-action@v3.2.0
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
-          args: release --rm-dist
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Register on pkg.go.dev

@@ -30,64 +30,50 @@ jobs:
   goreleaser-dryrun:
     strategy:
       matrix:
-        golang: [1.19.x]
+        golang: [1.22.x]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.golang }}
-      - name: Cache Go modules
-        uses: actions/cache@v3.2.4
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.golang }}-v1-${{ hashFiles('**/go.sum') }}
-          restore-keys: ${{ runner.os }}-go-${{ matrix.golang }}-v1-
       - name: Run GoReleaser (Dry Run)
-        uses: goreleaser/goreleaser-action@v4.2.0
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
-          args: release --rm-dist --snapshot --skip-publish
+          args: release --clean --snapshot --skip=publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   golangci-lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        golangci_lint: [v1.52]
     steps:
-      - uses: actions/checkout@v3.5.3
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3.6.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          version: ${{ matrix.golangci_lint }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          go-version: 1.22.x
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.62
           args: --timeout=2m
-          only-new-issues: false
-          working-directory: .
   tests-on-linux:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
+    needs: golangci-lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
         golang:
-          - 1.17.x
+          - 1.22.x
     env:
       OS: ubuntu-latest
       GOLANG: ${{ matrix.golang }}
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v4
       - name: Install Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v3.0.11
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.golang }}-v1-${{ hashFiles('**/go.sum') }}
-          restore-keys: ${{ runner.os }}-go-${{ matrix.golang }}-v1-
       - name: Compile the project
         run: make go.install
       - name: Check go.mod and go.sum
@@ -98,7 +84,7 @@ jobs:
       - name: Run tests on Unix-like operating systems
         run: make unittest
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3.1.1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
